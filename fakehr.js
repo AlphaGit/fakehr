@@ -11,6 +11,14 @@
   // it can be restored later
   var nativeRequest = window.XMLHttpRequest;
 
+  // returns true if the tester matches the value url
+  function urlMatches(tester, value){
+    if (typeof tester === 'string')
+      return tester === value;
+    else if (tester instanceof RegExp)
+      return tester.test(value);
+  }
+
   var fakehr = {
     addRequest: function(r){
       this.requests.push(r);
@@ -51,7 +59,7 @@
       for (var i = requests.length - 1; i >= 0; i--) {
         var request = requests[i];
         var requestMethod = (request.method || "").toLowerCase();
-        if(requestMethod === method.toLowerCase() && request.url === url && request.readyState === readyState &&
+        if(requestMethod === method.toLowerCase() && urlMatches(url, request.url) && request.readyState === readyState &&
           (!requestBody || request.requestBody === requestBody)) {
           return request;
         }

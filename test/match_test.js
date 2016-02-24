@@ -47,5 +47,14 @@ test("2 post requests with the same url, yet different body", function() {
 test("does not break on matching uninitialized requests", function() {
   var xhr = new XMLHttpRequest();
 
-  equal(fakehr.match('get', '/a/path'), null);
+  equal(null, fakehr.match('get', '/a/path'));
+});
+
+test("matches URL by passing a RegExp value", function() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('post', 'http://example.com/resource');
+
+  equal(xhr, fakehr.match('post', /example\.com/));
+  equal(xhr, fakehr.match('post', /resource/));
+  ok(!fakehr.match('post', /somethingElseEntirely/));
 });
